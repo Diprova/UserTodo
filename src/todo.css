@@ -1,0 +1,15 @@
+.todo{
+    background-color: chocolate;
+    color: black;
+    line-height: 1.6;
+}
+
+.green{
+    background-color: rgb(141, 194, 141);
+    border:1px solid;
+}
+
+.red{
+    background-color: rgb(231, 184, 184);
+    border:1px solid;
+}
