@@ -1,5 +1,10 @@
-import React, { useState, useEffect } from "react";
-import "./todo.css";
+import React from "react";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
+import { styled } from "@mui/system";
+import Grid from "@mui/material/Grid";
+import translate from "translate";
 
 const Todo = ({ todo, setTodo, activeUser }) => {
   const handleClick = (id) => {
@@ -11,22 +16,61 @@ const Todo = ({ todo, setTodo, activeUser }) => {
     ]);
   };
 
+  const PaperContent = styled("div")(({ theme }) => ({
+    width: "20rem",
+    height: "1.5rem",
+    padding: "1rem",
+  }));
+
+  const ButtonContent = styled("div")(({ theme }) => ({
+    padding: "0 10px",
+  }));
+
+  const handleTranslate = async (id) => {
+    const result = await translate(`${todo[id - 1].title}`, {
+      from: "la",
+      to: "en",
+    });
+    setTodo([...todo, (todo[id - 1].title = result)]);
+  };
+
   return (
-    <div className="todo">
+    <Box
+      sx={{
+        display: "flex",
+        flexWrap: "wrap",
+        "& > :not(style)": {
+          m: 1,
+        },
+      }}
+    >
       {todo
-        .filter((e) => e.userId === activeUser)
+        .filter((e) => e.userId === activeUser && e.completed === false)
         .map((work) => {
           return (
-            <div
+            <Paper
+              variant={"elevation"}
+              elevation={3}
+              square={false}
               key={work.id}
-              className={work.completed === true ? "green" : "red"}
-              onClick={() => handleClick(work.id)}
             >
-              {work.title}
-            </div>
+              <Grid container spacing={2} direction="column">
+                <Grid item xs={6}>
+                  <PaperContent>{work.title}</PaperContent>
+                </Grid>
+                <Grid item xs={6}>
+                  <ButtonContent>
+                    <Button onClick={() => handleTranslate(work.id)}>
+                      Translate
+                    </Button>
+                    <Button onClick={() => handleClick(work.id)}>Done</Button>
+                  </ButtonContent>
+                </Grid>
+              </Grid>
+            </Paper>
           );
         })}
-    </div>
+    </Box>
   );
 };
 
